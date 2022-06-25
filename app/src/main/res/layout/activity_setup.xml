@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/topFrame">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <ImageView
+            android:id="@+id/setupBgrImg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="setup Background" />
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/cmdCont">
+
+        <ImageView
+            android:id="@+id/setupZoomImage"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="ZoomingTouch" />
+        <Button
+            android:id="@+id/setupStartBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_gravity="top"
+            android:text="Select" />
+        <Button
+            android:id="@+id/setupScreenshotBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_gravity="top"
+            android:text="SS" />
+    </LinearLayout>
+
+</RelativeLayout>

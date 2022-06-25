@@ -13,4 +13,7 @@
     <string name="port_text">12345</string>
     <string name="code_hint">Code</string>
     <string name="code_text">123456</string>
+    <string name="accessibility_service_description">Screen Monitor Servvice</string>
+    <string name="title_activity_setup">Mapper Setup</string>
+    <string name="setup_bgr_img">setup_bgr_img</string>
 </resources>

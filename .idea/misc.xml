@@ -4,7 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/MYDATA_DONTSYNC/android/ControllerMapper/app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="..\:/MYDATA_DONTSYNC/android/ControllerMapper/app/src/main/res/layout/activity_setup.xml" value="0.1" />
         <entry key="..\:/MYDATA_DONTSYNC/android/ControllerMapper/app/src/main/res/layout/dialog_pair.xml" value="0.18854166666666666" />
+        <entry key="..\:/MYDATA_DONTSYNC/android/ControllerMapper/app/src/main/res/xml/accessibility_service_config.xml" value="0.19322916666666667" />
         <entry key="..\:/MYDATA_DONTSYNC/android/ControllerMapper/app/src/main/res/xml/provider_paths.xml" value="0.18854166666666666" />
       </map>
     </option>

@@ -2,6 +2,7 @@ package me.ductran.controllermapper.touchEmu
 
 import android.content.Context
 import android.util.Log
+import xyz.cp74.evdev.InputDevice
 
 data class EmuInputEvent(
     val type: Int,
@@ -41,5 +42,27 @@ class InputEventMonitor(val devPath: String,
         } catch (e: Exception) {
             Log.d(TAG, "output parsing error: $e")
         }
+    }
+}
+
+class InputEventMonitor2() {
+    companion object {
+        const val TAG = "INDEV"
+    }
+
+    val device = InputDevice("/dev/input/event1");
+
+    fun start() {
+        Log.d(TAG, "Starting")
+        device.onAttach {
+            Log.d(TAG, "Attached")
+        }
+        device.onDetach() {
+            Log.d(TAG, "Detached")
+        }
+        device.onEvent() {
+            Log.d(TAG, "Event: $it")
+        }
+        device.start()
     }
 }

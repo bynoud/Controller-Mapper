@@ -1,49 +1,38 @@
-
-# For more information about using CMake with Android Studio, read the
-# documentation: https://d.android.com/studio/projects/add-native-code.html
-
-# Sets the minimum version of CMake required to build the native library.
-
 cmake_minimum_required(VERSION 3.18.1)
 
-# Declares and names the project.
+project("event_inj")
 
-project("controllermapper")
+include(AndroidNdkGdb)
+include(AndroidNdkModules)
 
-# Creates and names a library, sets it as either STATIC
-# or SHARED, and provides the relative paths to its source code.
-# You can define multiple libraries, and CMake builds them for you.
-# Gradle automatically packages shared libraries with your APK.
+set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/src/main/libs)
 
-add_library( # Sets the name of the library.
-             controllermapper
+set(LIBRARY_DEPS android log)
+android_ndk_gdb_enable()
+#
+## Searches for a specified prebuilt library and stores the path as a
+## variable. Because CMake includes system libraries in the search path by
+## default, you only need to specify the name of the public NDK library
+## you want to add. CMake verifies that the library exists before
+## completing its build.
+#find_library( # Sets the name of the path variable.
+#        log-lib
+#
+#        # Specifies the name of the NDK library that
+#        # you want CMake to locate.
+#        log)
+#find_library(ANDROID_LOG_LIB log)
 
-             # Sets the library as a shared library.
-             SHARED
+## Specifies libraries CMake should link to your target library. You
+## can link multiple libraries, such as libraries you define in this
+## build script, prebuilt third-party libraries, or system libraries.
+#target_link_libraries( # Specifies the target library.
+#        # Links the target library to the log library
+#        # included in the NDK.
+#        ${ANDROID_LOG_LIB}
+#        ${log-lib})
 
-             # Provides a relative path to your source file(s).
-             controllermapper.cpp )
+add_executable(event_inj
+        event_inj.cpp )
 
-# Searches for a specified prebuilt library and stores the path as a
-# variable. Because CMake includes system libraries in the search path by
-# default, you only need to specify the name of the public NDK library
-# you want to add. CMake verifies that the library exists before
-# completing its build.
-
-find_library( # Sets the name of the path variable.
-              log-lib
-
-              # Specifies the name of the NDK library that
-              # you want CMake to locate.
-              log )
-
-# Specifies libraries CMake should link to your target library. You
-# can link multiple libraries, such as libraries you define in this
-# build script, prebuilt third-party libraries, or system libraries.
-
-target_link_libraries( # Specifies the target library.
-                       controllermapper
-
-                       # Links the target library to the log library
-                       # included in the NDK.
-                       ${log-lib} )
+target_link_libraries(event_inj log android)

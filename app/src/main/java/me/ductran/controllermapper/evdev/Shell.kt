@@ -7,11 +7,21 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.ductran.controllermapper.FilelogADB
-import me.ductran.controllermapper.touchEmu.ShellOutputListener
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.io.PrintStream
+
+interface ShellOutputListener {
+    fun onShellOutput(msg: String)
+    fun onShellError(msg: String)
+    fun onShellReady(ready: Boolean)
+}
+
+interface ShellStreamHandler {
+    fun handleOutputStream(inStream: InputStream)
+    fun handleErrorStream(inStream: InputStream)
+}
 
 open class DefaultShellOutputListener: ShellOutputListener {
     override fun onShellOutput(msg: String) {
@@ -28,18 +38,26 @@ open class DefaultShellOutputListener: ShellOutputListener {
 
 }
 
+
 class ShellSimple(): ViewModel() {
     companion object {
         const val TAG = "SHS"
     }
 
     private var process: Process? = null
-    private var listener: ShellOutputListener = DefaultShellOutputListener()
     private var resumeThread: Thread? = null
 
-    fun start(cmds: List<String>, context: Context, listener: ShellOutputListener? = null): Process {
+    private var listener: ShellOutputListener = DefaultShellOutputListener()
+    private var streamHandler: ShellStreamHandler? = null
+
+    fun start(cmds: List<String>,
+              context: Context,
+              listener: ShellOutputListener? = null,
+              streamHandler: ShellStreamHandler? = null
+    ): Process {
         Log.d(FilelogADB.TAG, "startShell $cmds")
         if (listener!=null) this.listener = listener
+        this.streamHandler = streamHandler
 
         val processBuilder = ProcessBuilder(cmds)
             .directory(context.filesDir)
@@ -76,19 +94,24 @@ class ShellSimple(): ViewModel() {
 
     private fun startOutputMonitor(inStream: InputStream,
                                    isError: Boolean) = viewModelScope.launch(Dispatchers.IO) {
-        val buf = BufferedReader(InputStreamReader(inStream))
-        Log.d(TAG, "Start monitor $isError")
-        var line: String? = null
-        try {
-            while (buf.readLine().also { line = it } != null) {
-                if (isError) {
-                    listener.onShellError(line!!)
-                } else {
-                    listener.onShellOutput(line!!)
+        if (streamHandler != null) {
+            if (isError) streamHandler!!.handleErrorStream(inStream)
+            else streamHandler!!.handleOutputStream(inStream)
+        } else {
+            val buf = BufferedReader(InputStreamReader(inStream))
+            Log.d(TAG, "Start monitor $isError")
+            var line: String? = null
+            try {
+                while (buf.readLine().also { line = it } != null) {
+                    if (isError) {
+                        listener.onShellError(line!!)
+                    } else {
+                        listener.onShellOutput(line!!)
+                    }
                 }
+            } catch (e: Exception) {
+                Log.d(TAG, "Error during output monitor $isError: $e")
             }
-        } catch (e: Exception) {
-            Log.d(TAG, "Error during output monitor: $e")
         }
         Log.d(TAG, "Done monitor $isError")
     }
